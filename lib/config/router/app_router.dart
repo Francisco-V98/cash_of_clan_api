@@ -10,11 +10,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
     ),
     GoRoute(
       path: '/player-data',
-      builder: (context, state) => const SearchScreen(),
+      builder: (context, state) => const DataPlayerScreen(),
     ),
     GoRoute(
       path: '/clan-data',
-      builder: (context, state) => const SearchScreen(),
+      builder: (context, state) => const DataClanScreen(),
     ),
   ]);
 });
