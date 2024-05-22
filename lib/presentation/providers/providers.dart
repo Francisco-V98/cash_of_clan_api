@@ -1,0 +1,1 @@
+export 'segmented_profile_provider.dart';
