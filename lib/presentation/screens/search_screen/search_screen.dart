@@ -48,18 +48,25 @@ class _Body extends ConsumerWidget {
                     labelInput: 'ID Jugador',
                     controller: controller,
                     onPressed: () {
+                      ref.read(dataPlayerProvider.notifier).getDataPlayer();
                       context.push('/player-data');
                       ref
                           .read(textControllerProvider.notifier)
                           .update((state) => controller.text);
-                    })
+                    },
+                  )
                 : ContainerSearchProfile(
                     title: 'Buscar Clan',
                     labelInput: 'ID Clan',
                     controller: controller,
                     onPressed: () {
+                      ref.read(dataPlayerProvider.notifier).getDataPlayer();
                       context.push('/clan-data');
-                    }),
+                      ref
+                          .read(textControllerProvider.notifier)
+                          .update((state) => controller.text);
+                    },
+                  ),
           ],
         ),
       ),

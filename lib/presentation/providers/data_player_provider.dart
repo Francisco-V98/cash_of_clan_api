@@ -3,6 +3,8 @@ import 'package:cash_of_clan_api/Services/models/data_player_model.dart';
 import 'package:cash_of_clan_api/presentation/providers/providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+
+
 final dataPlayerProvider =
     StateNotifierProvider<DataPlayerNotifier, DataPlayerState>((ref) {
   final valueTextController = ref.watch(textControllerProvider);
@@ -17,7 +19,7 @@ class DataPlayerNotifier extends StateNotifier<DataPlayerState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      final getPlayer = await DataProfileService().getDataPlayer(idValue);
+      final getPlayer = await DataProfileService().getDataPlayer('92PRJC900'/*idValue*/);
       state = state.copyWith(isLoading: false, player: getPlayer);
     } catch (error) {
       ('Error al obtener la data del player: $error');
