@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class TextH1 extends StatelessWidget {
+  final bool centerText;
   const TextH1({
     super.key,
-    required this.text, this.size = 24,
+    required this.text,
+    this.size = 24,
+    this.centerText = true,
   });
 
   final String text;
@@ -13,7 +16,7 @@ class TextH1 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      textAlign: TextAlign.center,
+      textAlign: centerText ? TextAlign.center : TextAlign.start,
       style: TextStyle(
         fontFamily: 'SupercellMagic',
         fontSize: size,

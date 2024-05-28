@@ -19,7 +19,7 @@ class DataPlayerNotifier extends StateNotifier<DataPlayerState> {
     state = state.copyWith(isLoading: true);
 
     try {
-      final getPlayer = await DataProfileService().getDataPlayer('92PRJC900'/*idValue*/);
+      final getPlayer = await DataProfileService().getDataPlayer(/*idValue*/'92PRJC900');
       state = state.copyWith(isLoading: false, player: getPlayer);
     } catch (error) {
       ('Error al obtener la data del player: $error');

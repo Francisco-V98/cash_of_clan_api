@@ -43,10 +43,15 @@ class _Body extends ConsumerWidget {
     final player = ref.watch(dataPlayerProvider);
     final dataPlayer = ref.watch(dataPlayerProvider).player;
     final itemsHomeVillage = ref.watch(listHomeVillageProvider);
+    final itemsResourcesVillage = ref.watch(listResourcesProvider);
 
     if (player.isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
+
+    final List<HeroEquipment>? listTroops = dataPlayer?.troops;
+    final List<HeroEquipment>? listHeros = dataPlayer?.heroes;
+    final List<HeroEquipment>? listSpells = dataPlayer?.spells;
 
     return SingleChildScrollView(
       child: Padding(
@@ -54,51 +59,153 @@ class _Body extends ConsumerWidget {
         child: Column(
           children: [
             infoPlayerSection(dataPlayer),
-            const SizedBox(height: 24),
             ContainerDataProfiles(
               title: 'Campamento',
               body: [
-                SectionCardsData(list: itemsHomeVillage),
-                SectionCardsData(list: itemsHomeVillage),
+                SectionCardsData(
+                  list: itemsHomeVillage,
+                  title: 'Home Village',
+                ),
               ],
             ),
+            ContainerDataProfiles(
+              title: 'Botin',
+              body: [
+                SectionCardsData(
+                  list: itemsResourcesVillage,
+                  title: 'Recursos totales saqueados',
+                  centerText: false,
+                ),
+              ],
+            ),
+            armySection(listTroops, listHeros, listSpells),
           ],
         ),
       ),
     );
   }
 
+  Widget armySection(
+    List<HeroEquipment>? listTroops,
+    List<HeroEquipment>? listHeros,
+    List<HeroEquipment>? listSpells,
+  ) {
+    List<HeroEquipment>? homeTroops = listTroops
+        ?.where((equipment) => equipment.village == Village.HOME)
+        .toList();
+    List<HeroEquipment>? builderBaseTroops = listTroops
+        ?.where((equipment) => equipment.village == Village.BUILDER_BASE)
+        .toList();
+    List<HeroEquipment>? homeSpells = listSpells
+        ?.where((equipment) => equipment.village == Village.HOME)
+        .toList();
+    List<HeroEquipment>? homeVillageHero = listHeros
+        ?.where((equipment) => equipment.village == Village.HOME)
+        .toList();
+    List<HeroEquipment>? builderBaseHero = listHeros
+        ?.where((equipment) => equipment.village == Village.BUILDER_BASE)
+        .toList();
+
+    return DefaultTabController(
+      length: 2,
+      child: ContainerDataProfiles(
+        title: 'Ejercito',
+        body: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: TabBar(tabs: [
+              Tab(text: 'Home Village'),
+              Tab(text: 'Builder Base'),
+            ]),
+          ),
+          SizedBox(
+            height: 300,
+            child: TabBarView(children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    heroEquipmentSection(homeTroops),
+                    heroEquipmentSection(homeSpells),
+                    heroEquipmentSection(homeVillageHero),
+                  ],
+                ),
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    heroEquipmentSection(builderBaseTroops),
+                    heroEquipmentSection(builderBaseHero),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+          // heroEquipmentSection(listTroops),
+        ],
+      ),
+    );
+  }
+
+  Widget heroEquipmentSection(List<HeroEquipment>? listEquipment) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 5,
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 8,
+        ),
+        itemCount: listEquipment?.length,
+        itemBuilder: (BuildContext context, int index) {
+          final String level = listEquipment?[index].level.toString() ?? 'x';
+          final String name = listEquipment?[index].name ?? 'Error name';
+          return CardHeroEquipment(
+            level: level,
+            name: name,
+          );
+        },
+      ),
+    );
+  }
+
   Widget infoPlayerSection(GetDataPlayerModel? dataPlayer) {
+    final String? imageClan = dataPlayer?.clan?.badgeUrls?.small;
+    final Clan? clanData = dataPlayer?.clan;
     return ContainerDataProfiles(
       title: 'Jugador',
       body: [
         TextH1(text: dataPlayer?.name ?? 'Error name'),
         Text(dataPlayer?.tag ?? 'Error tag'),
         InfoHorizonIconIntoCar(
-          image: 'XP-p.png',
+          image: 'https://pixelcrux.com/Clash_of_Clans/Images/Icons/XP-p.png',
           title: 'Nivel de Experiencia',
           infoUp: dataPlayer?.expLevel.toString() ?? 'Error expLevel',
           infoDonw: '${dataPlayer?.builderBaseTrophies.toString()} XP',
         ),
         InfoHorizonIconIntoCar(
-          image: 'Trophy-p.png',
+          image:
+              'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Trophy-p.png',
           title: 'Trofeos',
           infoUp: dataPlayer?.trophies.toString() ?? 'Error trophies',
         ),
         InfoHorizonIconIntoCar(
-          image: 'Builder_Trophy.png',
+          image:
+              'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Builder_Trophy.png',
           title: 'Trofeos de Constructor',
           infoUp: dataPlayer?.builderBaseTrophies.toString() ??
               'Error builderBaseTrophies',
           infoDonw: dataPlayer?.builderBaseLeague?.name ??
               'Error builderBaseTrophies',
         ),
-        dataPlayer!.clan != null
+        clanData != null
             ? InfoHorizonIconIntoCar(
-                image: 'Builder_Trophy.png',
+                image: imageClan ??
+                    'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Builder_Trophy.png',
                 title: 'Clan',
-                infoUp: dataPlayer.clan?.name ?? 'Error clanName',
-                infoDonw: dataPlayer.clan?.tag ?? 'Error clanTag',
+                infoUp: clanData.name ?? 'Error clanName',
+                infoDonw: clanData.tag ?? 'Error clanTag',
                 divider: false,
               )
             : const SizedBox.shrink(),
@@ -108,46 +215,7 @@ class _Body extends ConsumerWidget {
       ],
     );
   }
-}
 
-class SectionCardsData extends StatelessWidget {
-  final List list;
-  const SectionCardsData({
-    super.key,
-    required this.list,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(vertical: 8),
-          child: TextH1(text: 'Home Village', size: 20),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 20),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              mainAxisExtent: 150,
-            ),
-            itemCount: list.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ContainerDataObject(
-                image: list[index].image,
-                title: list[index].title,
-                description: list[index].description,
-              );
-            },
-          ),
-        ),
-      ],
-    );
-  }
+
 }

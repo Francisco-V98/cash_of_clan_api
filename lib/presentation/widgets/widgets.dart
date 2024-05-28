@@ -1,3 +1,7 @@
+export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/section_card_data.dart';
+
+export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/card_hero_equipment.dart';
+
 export 'package:cash_of_clan_api/presentation/widgets/font_style.dart';
 
 export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/container_data_object.dart';
@@ -11,3 +15,4 @@ export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/cont
 export 'package:cash_of_clan_api/presentation/widgets/dearch_screen/segmented_profile.dart';
 
 export 'package:cash_of_clan_api/presentation/widgets/dearch_screen/container_search_profile.dart';
+

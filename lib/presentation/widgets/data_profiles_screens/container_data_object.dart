@@ -32,7 +32,7 @@ class ContainerDataObject extends StatelessWidget {
         children: [
           Container(
             width: double.infinity,
-            height: 80,
+            height: 64,
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 244, 244, 240),
               borderRadius: BorderRadius.vertical(top: Radius.circular(6)),

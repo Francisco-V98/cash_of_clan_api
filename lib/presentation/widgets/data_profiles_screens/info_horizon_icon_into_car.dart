@@ -24,7 +24,7 @@ class InfoHorizonIconIntoCar extends StatelessWidget {
           child: Row(
             children: [
               Image.network(
-                  'https://pixelcrux.com/Clash_of_Clans/Images/Icons/$image',
+                  image,
                   width: 40),
               const SizedBox(width: 8),
               Text(
