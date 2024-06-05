@@ -12,12 +12,14 @@ class ContainerDataObject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        const String imgError =
+        'https://developers.google.com/static/maps/documentation/streetview/images/error-image-generic.png';
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: const Color.fromARGB(255, 244, 228, 207),
         border: Border.all(
-          width: 2,
+          width: 1.5,
           color: const Color.fromARGB(255, 190, 114, 5),
         ),
         boxShadow: const [
@@ -40,7 +42,7 @@ class ContainerDataObject extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.network(
-                image,
+                image, errorBuilder: (context, error, stackTrace) => Image.network(imgError),
               ),
             ),
           ),

@@ -54,7 +54,7 @@ final listResourcesProvider = Provider<List<Item>>((ref) {
   final dataPlayer = ref.watch(dataPlayerProvider).player;
   return [
     Item(
-      title: 'Oro',
+      title: 'Gold',
       image: '$baseUrl/Icons/Gold.png',
       description: 'Nivel ${dataPlayer?.townHallLevel.toString()}',
       name: 'Gold Grab'
@@ -66,7 +66,7 @@ final listResourcesProvider = Provider<List<Item>>((ref) {
       name: 'Elixir Escapade'
     ),
     Item(
-      title: 'Elixir Oscuro',
+      title: 'Dark Elixir',
       image: '$baseUrl/Icons/Dark_Elixir.png',
       description: dataPlayer?.bestTrophies.toString() ?? 'Error bestTrophies',
       name: 'Heroic Heist'

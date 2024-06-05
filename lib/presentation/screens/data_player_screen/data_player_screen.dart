@@ -25,7 +25,7 @@ class DataPlayerScreen extends ConsumerWidget {
             ),
           ],
         ),
-        title: const Text('Jugador'),
+        title: const Text('Player'),
         centerTitle: true,
       ),
       body: const Center(
@@ -52,6 +52,7 @@ class _Body extends ConsumerWidget {
     final List<HeroEquipment>? listTroops = dataPlayer?.troops;
     final List<HeroEquipment>? listHeros = dataPlayer?.heroes;
     final List<HeroEquipment>? listSpells = dataPlayer?.spells;
+    final List<Achievement>? achievements = dataPlayer?.achievements;
 
     return SingleChildScrollView(
       child: Padding(
@@ -59,8 +60,9 @@ class _Body extends ConsumerWidget {
         child: Column(
           children: [
             infoPlayerSection(dataPlayer),
+            clanParticipationSection(dataPlayer),
             ContainerDataProfiles(
-              title: 'Campamento',
+              title: 'Campaign',
               body: [
                 SectionCardsData(
                   list: itemsHomeVillage,
@@ -69,18 +71,147 @@ class _Body extends ConsumerWidget {
               ],
             ),
             ContainerDataProfiles(
-              title: 'Botin',
+              title: 'Spoils',
               body: [
                 SectionCardsData(
                   list: itemsResourcesVillage,
-                  title: 'Recursos totales saqueados',
+                  title: 'Total Resources Looted',
                   centerText: false,
                 ),
               ],
             ),
             armySection(listTroops, listHeros, listSpells),
+            achievementsSection(achievements),
           ],
         ),
+      ),
+    );
+  }
+
+  ContainerDataProfiles clanParticipationSection(
+      GetDataPlayerModel? dataPlayer) {
+    final String? clanIcon = dataPlayer?.clan?.badgeUrls?.medium;
+    return ContainerDataProfiles(
+      title: 'Clan Participation',
+      body: [
+        Stack(
+          children: [
+            clanIcon == null
+                ? const SizedBox.shrink()
+                : Positioned(
+                    right: 0,
+                    child: Opacity(
+                      opacity: 0.2,
+                      child: Image.network(
+                        clanIcon,
+                        width: 100,
+                      ),
+                    ),
+                  ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Column(
+                  children: [
+                    TextH1(
+                      text: dataPlayer?.clan?.name ?? 'Error name Clan',
+                      size: 20,
+                    ),
+                    Text(dataPlayer?.clan?.tag ?? 'Error tag'),
+                  ],
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Column(
+                    children: [
+                      InfoHorizonIntoCar(title: 'Role', infoUp: 'Member'),
+                      InfoHorizonIntoCar(
+                          title: 'Clan Wars', infoUp: 'Opted In'),
+                      InfoHorizonIntoCar(
+                          title: 'Troops Donated This Season', infoUp: '0'),
+                    ],
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  child: TextH1(
+                    text: 'Todas las Donaciones',
+                    size: 20,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget achievementsSection(List<Achievement>? achievements) {
+    List<Achievement>? homeAchievements = achievements
+        ?.where((equipment) => equipment.village == Village.HOME)
+        .toList();
+    List<Achievement>? builderBaseAchievements = achievements
+        ?.where((equipment) => equipment.village == Village.BUILDER_BASE)
+        .toList();
+
+    return DefaultTabController(
+      length: 2,
+      child: ContainerDataProfiles(
+        title: 'Achivmnts',
+        body: [
+          const Padding(
+            padding: EdgeInsets.only(bottom: 8),
+            child: TabBar(tabs: [
+              Tab(text: 'Home Village'),
+              Tab(text: 'Builder Base'),
+            ]),
+          ),
+          SizedBox(
+            height: 300,
+            child: TabBarView(
+              children: [
+                SingleChildScrollView(
+                  child: achievementsGridView(homeAchievements),
+                ),
+                SingleChildScrollView(
+                  child: achievementsGridView(builderBaseAchievements),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget achievementsGridView(List<Achievement>? achievements) {
+    if (achievements == null || achievements.isEmpty) {
+      return const Center(child: Text('No hay logros disponibles.'));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 8,
+          mainAxisSpacing: 8,
+          mainAxisExtent: 253,
+        ),
+        itemCount: achievements.length,
+        itemBuilder: (BuildContext context, int index) {
+          return ContainerAchievementsData(
+            rating: achievements[index].stars,
+            title: achievements[index].name ?? 'error title',
+            info: achievements[index].info ?? 'error info',
+            completionInfo: achievements[index].completionInfo ?? 'Completed!',
+            target: achievements[index].target,
+            value: achievements[index].value,
+          );
+        },
       ),
     );
   }
@@ -109,7 +240,7 @@ class _Body extends ConsumerWidget {
     return DefaultTabController(
       length: 2,
       child: ContainerDataProfiles(
-        title: 'Ejercito',
+        title: 'Army',
         body: [
           const Padding(
             padding: EdgeInsets.only(bottom: 8),
@@ -124,17 +255,17 @@ class _Body extends ConsumerWidget {
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    heroEquipmentSection(homeTroops),
-                    heroEquipmentSection(homeSpells),
-                    heroEquipmentSection(homeVillageHero),
+                    armyGridView(homeTroops),
+                    armyGridView(homeSpells),
+                    armyGridView(homeVillageHero),
                   ],
                 ),
               ),
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    heroEquipmentSection(builderBaseTroops),
-                    heroEquipmentSection(builderBaseHero),
+                    armyGridView(builderBaseTroops),
+                    armyGridView(builderBaseHero),
                   ],
                 ),
               ),
@@ -146,7 +277,7 @@ class _Body extends ConsumerWidget {
     );
   }
 
-  Widget heroEquipmentSection(List<HeroEquipment>? listEquipment) {
+  Widget armyGridView(List<HeroEquipment>? listEquipment) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12),
       child: GridView.builder(
@@ -159,11 +290,13 @@ class _Body extends ConsumerWidget {
         ),
         itemCount: listEquipment?.length,
         itemBuilder: (BuildContext context, int index) {
-          final String level = listEquipment?[index].level.toString() ?? 'x';
+          final int level = listEquipment?[index].level ?? 0;
+          final int maxLevel = listEquipment?[index].maxLevel ?? 0;
           final String name = listEquipment?[index].name ?? 'Error name';
           return CardHeroEquipment(
             level: level,
             name: name,
+            maxLevel: maxLevel,
           );
         },
       ),
@@ -173,49 +306,130 @@ class _Body extends ConsumerWidget {
   Widget infoPlayerSection(GetDataPlayerModel? dataPlayer) {
     final String? imageClan = dataPlayer?.clan?.badgeUrls?.small;
     final Clan? clanData = dataPlayer?.clan;
+    final String townHallLevel = dataPlayer!.townHallLevel.toString();
     return ContainerDataProfiles(
-      title: 'Jugador',
+      title: 'Player',
       body: [
-        TextH1(text: dataPlayer?.name ?? 'Error name'),
-        Text(dataPlayer?.tag ?? 'Error tag'),
-        InfoHorizonIconIntoCar(
-          image: 'https://pixelcrux.com/Clash_of_Clans/Images/Icons/XP-p.png',
-          title: 'Nivel de Experiencia',
-          infoUp: dataPlayer?.expLevel.toString() ?? 'Error expLevel',
-          infoDonw: '${dataPlayer?.builderBaseTrophies.toString()} XP',
+        Stack(
+          children: [
+            Positioned(
+              right: 0,
+              child: Opacity(
+                opacity: 0.2,
+                child: Image.network(
+                  'https://pixelcrux.com/Clash_of_Clans/Images/Hall/Town_Hall_$townHallLevel.png',
+                  width: 100,
+                ),
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextH1(text: dataPlayer.name ?? 'Error name'),
+                        Text(dataPlayer.tag ?? 'Error tag'),
+                      ],
+                    ),
+                    const Spacer(),
+                    Container(
+                      height: 30,
+                      width: 48,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 161, 95, 3),
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: const [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            blurRadius: 8,
+                            color: Colors.black45,
+                          ),
+                        ],
+                      ),
+                      child: Stack(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            height: 15,
+                            decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 190, 114, 5),
+                            borderRadius: BorderRadius.vertical(top: Radius.circular(4))
+                            ),
+                          ),
+                          const Center(
+                            child: Text(
+                              'Visit',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                InfoHorizonIconIntoCar(
+                  image:
+                      'https://pixelcrux.com/Clash_of_Clans/Images/Icons/XP-p.png',
+                  title: 'Experience Level',
+                  infoUp: dataPlayer.expLevel.toString(),
+                  infoDonw: '${dataPlayer.builderBaseTrophies.toString()} XP',
+                ),
+                InfoHorizonIconIntoCar(
+                  image:
+                      'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Trophy-p.png',
+                  title: 'Trophies',
+                  infoUp: dataPlayer.trophies.toString(),
+                ),
+                InfoHorizonIconIntoCar(
+                  image:
+                      'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Builder_Trophy.png',
+                  title: 'Builder Trophies',
+                  infoUp: dataPlayer.builderBaseTrophies.toString(),
+                  infoDonw: dataPlayer.builderBaseLeague?.name ??
+                      'Error builderBaseTrophies',
+                ),
+                clanData != null
+                    ? InfoHorizonIconIntoCar(
+                        image: imageClan ??
+                            'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Builder_Trophy.png',
+                        title: 'Clan',
+                        infoUp: clanData.name ?? 'Error clanName',
+                        infoDonw: clanData.tag ?? 'Error clanTag',
+                        divider: false,
+                      )
+                    : const SizedBox.shrink(),
+                const SizedBox(height: 24),
+                const TextH1(text: 'Change Player', size: 20),
+                const SizedBox(height: 4),
+                const Text('Enter Player Tag'),
+                const TextfieldDataProfiels(),
+                const SizedBox(height: 4),
+                const Row(
+                  children: [
+                    Icon(
+                      Icons.help,
+                      size: 16,
+                      color: Color.fromARGB(255, 193, 112, 9),
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      'What is a player tag?',
+                      style: TextStyle(color: Color.fromARGB(255, 193, 112, 9)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
         ),
-        InfoHorizonIconIntoCar(
-          image:
-              'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Trophy-p.png',
-          title: 'Trofeos',
-          infoUp: dataPlayer?.trophies.toString() ?? 'Error trophies',
-        ),
-        InfoHorizonIconIntoCar(
-          image:
-              'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Builder_Trophy.png',
-          title: 'Trofeos de Constructor',
-          infoUp: dataPlayer?.builderBaseTrophies.toString() ??
-              'Error builderBaseTrophies',
-          infoDonw: dataPlayer?.builderBaseLeague?.name ??
-              'Error builderBaseTrophies',
-        ),
-        clanData != null
-            ? InfoHorizonIconIntoCar(
-                image: imageClan ??
-                    'https://pixelcrux.com/Clash_of_Clans/Images/Icons/Builder_Trophy.png',
-                title: 'Clan',
-                infoUp: clanData.name ?? 'Error clanName',
-                infoDonw: clanData.tag ?? 'Error clanTag',
-                divider: false,
-              )
-            : const SizedBox.shrink(),
-        const SizedBox(height: 24),
-        const TextH1(text: 'Cambiar Jugador', size: 20),
-        const TextfieldDataProfiels(),
       ],
     );
   }
-
-
-
 }

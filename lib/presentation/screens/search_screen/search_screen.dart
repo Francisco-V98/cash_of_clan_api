@@ -38,7 +38,7 @@ class _Body extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 64),
-              child: Image.network('https://i.imgur.com/RympLgO.png'),
+              child: Image.network('https://upload.wikimedia.org/wikipedia/en/5/59/Clash_of_Clans_Logo.png'),
             ),
             SegmentedProfile(currentProfileFilter: currentProfileFilter),
             const SizedBox(height: 8),
@@ -48,7 +48,7 @@ class _Body extends ConsumerWidget {
                     labelInput: 'ID Jugador',
                     controller: controller,
                     onPressed: () {
-                      ref.read(dataPlayerProvider.notifier).getDataPlayer();
+                      ref.read(dataPlayerProvider.notifier).getDataPlayer(controller.text);
                       context.push('/player-data');
                       ref
                           .read(textControllerProvider.notifier)
@@ -60,7 +60,7 @@ class _Body extends ConsumerWidget {
                     labelInput: 'ID Clan',
                     controller: controller,
                     onPressed: () {
-                      ref.read(dataPlayerProvider.notifier).getDataPlayer();
+                      ref.read(dataPlayerProvider.notifier).getDataPlayer(controller.text);
                       context.push('/clan-data');
                       ref
                           .read(textControllerProvider.notifier)

@@ -19,7 +19,7 @@ class ContainerDataProfiles extends StatelessWidget {
           color: const Color.fromARGB(255, 230, 231, 234),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            width: 2,
+            width: 1.5,
             color: const Color.fromARGB(255, 190, 114, 5),
           ),
           boxShadow: const [
@@ -34,7 +34,7 @@ class ContainerDataProfiles extends StatelessWidget {
           children: [
             titleSection(),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12),
               child: SizedBox(
                 width: double.infinity,
                 child: Column(
@@ -51,7 +51,7 @@ class ContainerDataProfiles extends StatelessWidget {
 
   Widget titleSection() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      padding: const EdgeInsets.symmetric(vertical: 8),
       child: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -65,7 +65,7 @@ class ContainerDataProfiles extends StatelessWidget {
           ]
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Text(
             title,
             style: const TextStyle(

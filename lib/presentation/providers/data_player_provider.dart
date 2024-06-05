@@ -15,11 +15,11 @@ class DataPlayerNotifier extends StateNotifier<DataPlayerState> {
   final String idValue;
   DataPlayerNotifier(this.idValue) : super(DataPlayerState());
 
-  Future<void> getDataPlayer() async {
+  Future<void> getDataPlayer(String id) async {
     state = state.copyWith(isLoading: true);
 
     try {
-      final getPlayer = await DataProfileService().getDataPlayer(/*idValue*/'92PRJC900');
+      final getPlayer = await DataProfileService().getDataPlayer('92PRJC900');
       state = state.copyWith(isLoading: false, player: getPlayer);
     } catch (error) {
       ('Error al obtener la data del player: $error');

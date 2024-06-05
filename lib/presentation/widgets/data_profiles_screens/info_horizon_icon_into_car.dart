@@ -17,42 +17,45 @@ class InfoHorizonIconIntoCar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8),
-          child: Row(
-            children: [
-              Image.network(
-                  image,
-                  width: 40),
-              const SizedBox(width: 8),
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    infoUp,
-                    style: const TextStyle(fontSize: 16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Image.network(
+                    image,
+                    width: 40),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
                   ),
-                  infoDonw == ''
-                      ? const SizedBox.shrink()
-                      : Text(infoDonw, style: const TextStyle(fontSize: 12)),
-                ],
-              ),
-            ],
+                ),
+                const Spacer(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      infoUp,
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    infoDonw == ''
+                        ? const SizedBox.shrink()
+                        : Text(infoDonw, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        divider
-            ? const Divider(color: Colors.black54)
-            : const SizedBox.shrink(),
-      ],
+          divider
+              ? const Divider(color: Colors.black54)
+              : const SizedBox.shrink(),
+        ],
+      ),
     );
   }
 }

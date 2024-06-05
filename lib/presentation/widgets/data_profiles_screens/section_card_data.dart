@@ -22,7 +22,7 @@ class SectionCardsData extends StatelessWidget {
           child: TextH1(text: title, size: 20, centerText: centerText),
         ),
         Padding(
-          padding: const EdgeInsets.only(bottom: 20),
+          padding: const EdgeInsets.only(bottom: 0 /*20*/),
           child: GridView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),

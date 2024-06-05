@@ -5,11 +5,19 @@ class DataProfileService {
   var dio = Dio();
   final String baseUrl = 'https://api.clashofclans.com/v1';
   
+  //todo mi casa
   Map<String, dynamic> headers = {
     'Authorization':
         'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6ImEyNjEyNmUxLTkyNTQtNDJkMi1hYWUwLTY2MDg0MmYyZmJmZSIsImlhdCI6MTcxNjQxMzkyMSwic3ViIjoiZGV2ZWxvcGVyLzY0NTRkY2U2LWVkN2ItZjMzZC0zMzM4LTM2MDVhN2E0N2IxMCIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjM4LjEzNy4xODAuMjMiXSwidHlwZSI6ImNsaWVudCJ9XX0.UYN0FuHgCEfHedpQvOBYDbUyQfsUAwcGayCLeTxtAmYy6UPWkNgBkUbdGPhWXntZL5nI78XkRXRswv6DeEvz0A',
     'Content-Type': 'application/json',
   };
+
+  //todo casa mili
+  //   Map<String, dynamic> headers = {
+  //   'Authorization':
+  //       'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiIsImtpZCI6IjI4YTMxOGY3LTAwMDAtYTFlYi03ZmExLTJjNzQzM2M2Y2NhNSJ9.eyJpc3MiOiJzdXBlcmNlbGwiLCJhdWQiOiJzdXBlcmNlbGw6Z2FtZWFwaSIsImp0aSI6IjYxNzBjMjdkLTIyZDktNDk4Mi04ZWVhLTUxZDRkMDJjYTM0MSIsImlhdCI6MTcxNzE3MzY3OCwic3ViIjoiZGV2ZWxvcGVyLzY0NTRkY2U2LWVkN2ItZjMzZC0zMzM4LTM2MDVhN2E0N2IxMCIsInNjb3BlcyI6WyJjbGFzaCJdLCJsaW1pdHMiOlt7InRpZXIiOiJkZXZlbG9wZXIvc2lsdmVyIiwidHlwZSI6InRocm90dGxpbmcifSx7ImNpZHJzIjpbIjM4LjEzNy4xODAuMTgiXSwidHlwZSI6ImNsaWVudCJ9XX0.yBH2Sl0EjqBTcPw6q_Apyj56QdnxZTA0-6pQshcMCiE_FDvC27ewxsyuAcyHaFubAYKbrhLTnIs1ptzPMpQMMw',
+  //   'Content-Type': 'application/json',
+  // };
 
   Future<GetDataPlayerModel> getDataPlayer(String id) async {
     final String url = '$baseUrl/players/%23$id';

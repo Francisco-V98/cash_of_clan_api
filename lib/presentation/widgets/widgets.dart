@@ -1,3 +1,7 @@
+export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/info_horizon_into_card.dart';
+
+export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/container_achievements_data.dart';
+
 export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/section_card_data.dart';
 
 export 'package:cash_of_clan_api/presentation/widgets/data_profiles_screens/card_hero_equipment.dart';
